@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Capacitor</title>
+
+    <!-- ionic -->
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core@8.0.1/dist/ionic/ionic.esm.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core@8.0.1/css/ionic.bundle.css"
+    />
+
+    <style>
+      ion-card img {
+        width: 100%;
+      }
+
+      ion-skeleton-text {
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <ion-app>
+      <ion-nav root="page-listado-productos"></ion-nav>
+    </ion-app>
+
+    <template id="page-listado-productos.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Listado de Productos</ion-title>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar
+            id="search-bar"
+            placeholder="Buscar productos"
+          ></ion-searchbar>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button id="filter-button">Filtros</ion-button>
+            <ion-button id="sort-button">Ordenar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-grid id="listado-productos">
+          <ion-row>
+            <ion-col size="6">
+              <skeleton-producto></skeleton-producto>
+            </ion-col>
+            <ion-col size="6">
+              <skeleton-producto></skeleton-producto>
+            </ion-col>
+            <ion-col size="6">
+              <skeleton-producto></skeleton-producto>
+            </ion-col>
+            <ion-col size="6">
+              <skeleton-producto></skeleton-producto>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-infinite-scroll threshold="100px" id="infinite-scroll">
+          <ion-infinite-scroll-content
+            loading-spinner="bubbles"
+            loading-text="Cargando más productos..."
+          >
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-content>
+      <!-- Action Sheets -->
+      <ion-action-sheet id="filter-action-sheet"></ion-action-sheet>
+      <ion-action-sheet id="sort-action-sheet"></ion-action-sheet>
+    </template>
+
+    <template id="page-ampliacion-producto.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+          </ion-buttons>
+          <ion-title>Ampliación Producto</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div id="ampliacion-producto">
+          <skeleton-producto></skeleton-producto>
+        </div>
+      </ion-content>
+    </template>
+
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
