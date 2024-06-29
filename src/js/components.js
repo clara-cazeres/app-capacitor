@@ -44,9 +44,11 @@ customElements.define(
   "skeleton-producto",
   class extends HTMLElement {
     connectedCallback() {
+      const height = this.attributes.height?.value || "200px";
+      const width = this.attributes.width?.value || "100%";
       this.innerHTML = `
         <ion-card>
-          <ion-skeleton-text animated style="height: 200px; margin: 0"></ion-skeleton-text>
+          <ion-skeleton-text animated style="height: ${height}; width: ${width}; margin: 0"></ion-skeleton-text>
           <ion-card-header>
             <ion-card-title>
               <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>

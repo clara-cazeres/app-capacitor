@@ -17,6 +17,30 @@ function crearElementoProducto(producto) {
   `;
 }
 
+function mostrarError(mensaje) {
+  console.error(mensaje);
+  document.querySelector("#listado-productos").innerHTML = `<p>${mensaje}</p>`;
+}
+
+function construirUrlBusqueda(query, categoria, appliedFilters, orden, offset) {
+  let url = `${API_URL}/sites/MLU/search?official_store_id=${OFFICIAL_STORE_ID}`;
+  if (query) url += `&q=${encodeURIComponent(query)}`;
+  if (categoria) url += `&category=${categoria}`;
+  if (appliedFilters.length > 0) {
+    url += appliedFilters.map(filter => `&${filter}`).join('');
+  }
+  if (orden) url += `&sort=${orden}`;
+  url += `&offset=${offset}&limit=50`;
+  console.log(`URL construida: ${url}`); // Agregado para depuración
+  return url;
+}
+
+async function fetchProductos(searchUrl) {
+  console.log(`Fetch Productos URL: ${searchUrl}`); // Agregado para depuración
+  const rawRes = await fetch(searchUrl);
+  return await rawRes.json();
+}
+
 customElements.define(
   "page-listado-productos",
   class extends HTMLElement {
@@ -25,15 +49,12 @@ customElements.define(
 
       this.innerHTML = document.getElementById("page-listado-productos.html").innerHTML;
 
-      // input busqueda
       this.searchBar = this.querySelector("#search-bar");
       this.searchBar.addEventListener("ionInput", this.onSearch.bind(this));
 
-      // botones de filtros y orden
       this.filterButton = this.querySelector("#filter-button");
       this.sortButton = this.querySelector("#sort-button");
 
-      // action sheets
       this.filterActionSheet = this.querySelector("#filter-action-sheet");
       this.sortActionSheet = this.querySelector("#sort-action-sheet");
 
@@ -44,12 +65,13 @@ customElements.define(
       this.query = "";
       this.categoria = CATEGORY_ID;
       this.orden = "";
-      this.selectedFilter = "";
+      this.appliedFilters = [];
       this.offset = 0;
       this.hasMoreProducts = true;
 
       this.infiniteScroll = this.querySelector("#infinite-scroll");
       this.infiniteScroll.addEventListener("ionInfinite", async () => {
+        console.log('Infinite Scroll solicitado'); // Agregado para depuración
         await this.cargarMasProductos();
         this.infiniteScroll.complete();
       });
@@ -62,14 +84,19 @@ customElements.define(
       this.query = event.target.value.trim();
       this.offset = 0;
       this.hasMoreProducts = true;
+      console.log(`Buscar: ${this.query}`); // Agregado para depuración
       this.cargarListadoProductos();
     }
 
     abrirFiltroActionSheet() {
       this.filterActionSheet.header = "Filtrar Productos";
       this.filterActionSheet.buttons = this.filters.concat({
+        text: "Borrar Filtros",
+        role: "destructive",
+        handler: () => this.borrarFiltros()
+      }, {
         text: "Cancelar",
-        role: "cancel",
+        role: "cancel"
       });
       this.filterActionSheet.present();
     }
@@ -101,50 +128,49 @@ customElements.define(
       this.orden = sortOrder;
       this.offset = 0;
       this.hasMoreProducts = true;
+      console.log(`Ordenar: ${sortOrder}`); // Agregado para depuración
       this.cargarListadoProductos();
     }
 
     aplicarFiltro(filterId, valueId) {
-      this.selectedFilter = `${filterId}=${valueId}`;
+      const newFilter = `${filterId}=${valueId}`;
+      if (!this.appliedFilters.includes(newFilter)) {
+        this.appliedFilters.push(newFilter);
+      }
       this.offset = 0;
       this.hasMoreProducts = true;
+      console.log(`Filtros aplicados: ${this.appliedFilters}`); // Agregado para depuración
+      this.cargarListadoProductos();
+    }
+
+    borrarFiltros() {
+      this.appliedFilters = [];
+      this.offset = 0;
+      this.hasMoreProducts = true;
+      console.log('Filtros borrados'); // Agregado para depuración
       this.cargarListadoProductos();
     }
 
     async cargarListadoProductos() {
-      let searchUrl = `${API_URL}/sites/MLU/search?official_store_id=${OFFICIAL_STORE_ID}`;
-
-      if (this.query) {
-        searchUrl += `&q=${encodeURIComponent(this.query)}`;
-      }
-      if (this.categoria) {
-        searchUrl += `&category=${this.categoria}`;
-      }
-      if (this.selectedFilter) {
-        searchUrl += `&${this.selectedFilter}`;
-      }
-      if (this.orden) {
-        searchUrl += `&sort=${this.orden}`;
-      }
-      searchUrl += `&offset=${this.offset}&limit=50`;
-
+      const searchUrl = construirUrlBusqueda(this.query, this.categoria, this.appliedFilters, this.orden, this.offset);
       try {
-        const rawRes = await fetch(searchUrl);
-        const jsonRes = await rawRes.json();
+        const jsonRes = await fetchProductos(searchUrl);
         this.escribirListadoProductos(jsonRes);
       } catch (error) {
-        console.log("Error cargarListadoProductos", error);
-        this.querySelector("#listado-productos").innerHTML = "<p>Error cargando productos.</p>";
+        mostrarError("Error cargando productos");
       }
     }
 
     async cargarMasProductos() {
-      this.offset += 50;
-      await this.cargarListadoProductos();
+      if (this.hasMoreProducts) {
+        this.offset += 50;
+        console.log(`Cargar más productos: offset = ${this.offset}`); // Agregado para depuración
+        await this.cargarListadoProductos();
+      }
     }
 
     escribirListadoProductos(listado) {
-      console.log("listado productos", listado);
+      console.log("Listado de productos recibidos:", listado);
 
       const productosHtml = listado.results.map(producto => crearElementoProducto(producto)).join("");
       if (this.offset === 0) {
@@ -156,6 +182,9 @@ customElements.define(
       if (listado.results.length < 50) {
         this.hasMoreProducts = false;
         this.infiniteScroll.disabled = true;
+        console.log("No hay más productos para cargar"); // Agregado para depuración
+      } else {
+        this.infiniteScroll.disabled = false;
       }
     }
 
@@ -165,6 +194,7 @@ customElements.define(
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
+          console.log("Filtros recibidos", data); // Agregado para depuración
           this.filters = data.available_filters.map(filter => {
             return {
               text: filter.name,
@@ -175,7 +205,7 @@ customElements.define(
           });
         })
         .catch((error) => {
-          console.error('Error loading filters:', error);
+          mostrarError('Error cargando filtros');
         });
     }
 
@@ -216,13 +246,12 @@ customElements.define(
         const jsonRes = await rawRes.json();
         this.escribirAmpliacionProducto(jsonRes);
       } catch (error) {
-        console.log("Error cargarInformacionProducto", error);
-        this.querySelector("#ampliacion-producto").innerHTML = "<p>Error cargando producto.</p>";
+        mostrarError("Error cargando producto");
       }
     }
 
     escribirAmpliacionProducto(producto) {
-      console.log("data producto", producto);
+      console.log("Datos del producto recibidos:", producto);
 
       this.querySelector("#ampliacion-producto").innerHTML = `
         <item-producto
