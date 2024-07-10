@@ -4,16 +4,21 @@ import './pages.js';
 
 export function iniciarApp() {
   guardarElementos();
+  $.ionNav.setRoot('page-inicio');
 }
 
 function guardarElementos() {
-  $.ionNav = document.querySelector("ion-nav");
+  $.ionNav = document.getElementById("main-nav");
 }
 
 export function navegarPageAmpliacion(productoId) {
-  $.ionNav.push("page-ampliacion-producto", {
-    productoId: productoId,
-  });
+  console.log(`Navegando a ampliación de producto con ID: ${productoId}`);
+  $.ionNav.push('page-ampliacion-producto', { productoId });
+}
+
+export function navegarListadoProductos() {
+  console.log(`Navegando al listado de productos`);
+  $.ionNav.push('page-listado-productos');
 }
 
 iniciarApp();

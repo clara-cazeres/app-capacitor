@@ -1,44 +1,49 @@
 import { navegarPageAmpliacion } from './main.js';
 
 customElements.define(
-  "item-producto",
-  class extends HTMLElement {
-    connectedCallback() {
-      console.log("connected item-producto");
-
-      this.dataProducto = {
-        $id: this.attributes.$id.value,
-        nombre: this.attributes.nombre.value,
-        foto: this.attributes.foto.value,
-        precio: this.attributes.precio.value,
-        moneda: this.attributes.moneda.value,
-        descripcion: this.attributes.descripcion ? this.attributes.descripcion.value : "",
-      };
-
-      this.interactivo = this.attributes.interactivo?.value || "";
-      const buttonAttr = this.interactivo ? "button" : "";
-
-      this.innerHTML = `
-        <ion-card ${buttonAttr}>
-          <img alt="Imagen del producto" src="${this.dataProducto.foto}" />
-          <ion-card-header>
-            <ion-card-title>${this.dataProducto.nombre}</ion-card-title>
-            <ion-card-subtitle>
-              <span>${this.dataProducto.precio} ${this.dataProducto.moneda}</span>
-            </ion-card-subtitle>
-          </ion-card-header>
-          ${this.dataProducto.descripcion ? `<ion-card-content>${this.dataProducto.descripcion}</ion-card-content>` : ""}
-        </ion-card>
-      `;
-
-      if (this.interactivo) {
-        this.querySelector("ion-card").addEventListener("click", () =>
-          navegarPageAmpliacion(this.dataProducto.$id)
-        );
+    "item-producto",
+    class extends HTMLElement {
+      connectedCallback() {
+        console.log("connected item-producto");
+  
+        this.dataProducto = {
+          $id: this.attributes.$id.value,
+          nombre: this.attributes.nombre.value,
+          foto: this.attributes.foto.value,
+          precio: this.attributes.precio.value,
+          precioOriginal: this.attributes['precio-original']?.value || '',
+          moneda: this.attributes.moneda.value,
+          descripcion: this.attributes.descripcion ? this.attributes.descripcion.value : "",
+        };
+  
+        this.interactivo = this.attributes.interactivo?.value || "";
+        const buttonAttr = this.interactivo ? "button" : "";
+  
+        const originalPrice = this.dataProducto.precioOriginal ? `<span class="original-price">${this.dataProducto.precioOriginal} ${this.dataProducto.moneda}</span>` : '';
+        const discountedPrice = `<span class="discounted-price">${this.dataProducto.precio} ${this.dataProducto.moneda}</span>`;
+  
+        this.innerHTML = `
+          <ion-card ${buttonAttr}>
+            <img alt="Imagen del producto" src="${this.dataProducto.foto}" />
+            <ion-card-header>
+              <ion-card-title>${this.dataProducto.nombre}</ion-card-title>
+              <ion-card-subtitle>
+                ${originalPrice} ${discountedPrice}
+              </ion-card-subtitle>
+            </ion-card-header>
+            ${this.dataProducto.descripcion ? `<ion-card-content>${this.dataProducto.descripcion}</ion-card-content>` : ""}
+          </ion-card>
+        `;
+  
+        if (this.interactivo) {
+          this.querySelector("ion-card").addEventListener("click", () =>
+            navegarPageAmpliacion(this.dataProducto.$id)
+          );
+        }
       }
     }
-  }
-);
+  );
+  
 
 customElements.define(
   "skeleton-producto",

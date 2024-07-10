@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+body {
+  font-family: "Manrope", sans-serif;
+}
+
+ion-card img {
+  width: 100%;
+}
+
+ion-skeleton-text {
+  border-radius: 4px;
+}
+
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+}
+
+.inicio-container {
+  position: relative;
+  text-align: center;
+}
+
+.ver-productos-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #9d8d78;
+}
+
+.discounted-price {
+  color: #535353;
+  font-weight: bold;
+}
