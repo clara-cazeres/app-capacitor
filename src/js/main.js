@@ -1,6 +1,12 @@
 import { $ } from './constants.js';
 import './components.js';
 import './pages.js';
+import { configurarUserOptions, logout } from './functions.js';
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  iniciarApp();
+});
 
 export function iniciarApp() {
   guardarElementos();
@@ -9,6 +15,9 @@ export function iniciarApp() {
 
 function guardarElementos() {
   $.ionNav = document.getElementById("main-nav");
+
+  // Configurar opciones de usuario cuando se cambia de página
+  $.ionNav.addEventListener('ionNavDidChange', configurarUserOptions);
 }
 
 export function navegarPageAmpliacion(productoId) {
@@ -17,8 +26,6 @@ export function navegarPageAmpliacion(productoId) {
 }
 
 export function navegarListadoProductos() {
-  console.log(`Navegando al listado de productos`);
+  console.log("Navegando al listado de productos");
   $.ionNav.push('page-listado-productos');
 }
-
-iniciarApp();

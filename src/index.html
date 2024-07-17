@@ -22,12 +22,135 @@
       <ion-nav id="main-nav"></ion-nav>
     </ion-app>
 
+    <!-- Registro y Login -->
+    <template id="page-registro.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="page-login.html"></ion-back-button>
+          </ion-buttons>
+          <ion-title>Registro</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <form>
+          <ion-list>
+            <ion-item>
+              <ion-input
+                label="Nombre"
+                label-placement="floating"
+                placeholder="Nombre"
+                id="inp-registro-nombre"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                label="Mail"
+                label-placement="floating"
+                placeholder="Mail"
+                id="inp-registro-mail"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                label="Contraseña"
+                label-placement="floating"
+                placeholder="Contraseña"
+                id="inp-registro-pass"
+                type="password"
+              ></ion-input>
+            </ion-item>
+            <ion-button
+              type="submit"
+              class="ion-padding-horizontal ion-margin-top"
+              expand="block"
+              id="btn-submit-registro"
+            >
+              Registrarse
+            </ion-button>
+            <ion-button
+              fill="clear"
+              id="btn-navigate-login"
+              expand="block"
+              class="ion-padding-horizontal ion-margin-top"
+            >
+              Ir al login
+            </ion-button>
+          </ion-list>
+        </form>
+      </ion-content>
+    </template>
+
+    <template id="page-login.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="page-inicio.html"></ion-back-button>
+          </ion-buttons>
+          <ion-title>Login</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <form>
+          <ion-list>
+            <ion-item>
+              <ion-input
+                label="Mail"
+                label-placement="floating"
+                placeholder="Mail"
+                id="inp-login-mail"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input
+                label="Contraseña"
+                label-placement="floating"
+                placeholder="Contraseña"
+                id="inp-login-pass"
+                type="password"
+              ></ion-input>
+            </ion-item>
+            <ion-button
+              type="submit"
+              class="ion-padding-horizontal ion-margin-top"
+              expand="block"
+              id="btn-submit-login"
+            >
+              Ingresar
+            </ion-button>
+            <ion-button
+              fill="clear"
+              id="btn-navigate-registro"
+              expand="block"
+              class="ion-padding-horizontal ion-margin-top"
+            >
+              Ir al registro
+            </ion-button>
+          </ion-list>
+        </form>
+      </ion-content>
+    </template>
+
+    <template id="page-user.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="page-inicio.html"></ion-back-button>
+          </ion-buttons>
+          <ion-title>User</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list id="user-info"> </ion-list>
+      </ion-content>
+    </template>
+
     <template id="page-inicio.html">
       <ion-header>
         <ion-toolbar>
-          <ion-title>Inicio</ion-title>
+          <ion-title><ion-img src="img/logo.png"></ion-img></ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
             <ion-button>
@@ -54,11 +177,11 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-back-button defaultHref="page-inicio.html"></ion-back-button>
           </ion-buttons>
           <ion-title>Productos</ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
             <ion-button>
@@ -107,11 +230,13 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-back-button
+              defaultHref="page-listado-productos.html"
+            ></ion-back-button>
           </ion-buttons>
           <ion-title>Producto</ion-title>
           <ion-buttons slot="end">
-            <ion-button>
+            <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
             <ion-button>
@@ -134,6 +259,8 @@
           </ion-item>
         </ion-list>
         <ion-button id="agregar-carrito">Agregar al carrito</ion-button>
+        <ion-button id="btn-share">Compartir</ion-button>
+
         <ion-list>
           <ion-item-divider>
             <ion-label>Productos similares</ion-label>

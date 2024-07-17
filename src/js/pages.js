@@ -1,27 +1,29 @@
 import { API_URL, OFFICIAL_STORE_ID, CATEGORY_ID } from './constants.js';
 import { navegarPageAmpliacion, navegarListadoProductos } from './main.js';
+import { configurarUserOptions } from './functions.js';
+import { configurarShareButton } from './share-function.js'; // Importar la función de compartir
+import "./pages/login-pages.js";
 
 function crearElementoProducto(producto) {
-    const originalPrice = producto.original_price ? `<span class="original-price">${producto.original_price} ${producto.currency_id}</span>` : '';
-    const discountedPrice = `<span class="discounted-price">${producto.price} ${producto.currency_id}</span>`;
-    return `
-      <ion-col size="6">
-        <item-producto
-          interactivo="true"
-          $id="${producto.id}"
-          producto-id="${producto.id}"
-          nombre="${producto.title}"
-          foto="${producto.thumbnail}"
-          precio-original="${producto.original_price || ''}"
-          precio="${producto.price}"
-          moneda="${producto.currency_id}"
-        >
-          ${originalPrice} ${discountedPrice}
-        </item-producto>
-      </ion-col>
-    `;
-  }
-  
+  const originalPrice = producto.original_price ? `<span class="original-price">${producto.original_price} ${producto.currency_id}</span>` : '';
+  const discountedPrice = `<span class="discounted-price">${producto.price} ${producto.currency_id}</span>`;
+  return `
+    <ion-col size="6">
+      <item-producto
+        interactivo="true"
+        $id="${producto.id}"
+        producto-id="${producto.id}"
+        nombre="${producto.title}"
+        foto="${producto.thumbnail}"
+        precio-original="${producto.original_price || ''}"
+        precio="${producto.price}"
+        moneda="${producto.currency_id}"
+      >
+        ${originalPrice} ${discountedPrice}
+      </item-producto>
+    </ion-col>
+  `;
+}
 
 function mostrarError(mensaje) {
   console.error(mensaje);
@@ -48,65 +50,67 @@ async function fetchProductos(searchUrl) {
 }
 
 customElements.define(
-    "page-inicio",
-    class extends HTMLElement {
-      connectedCallback() {
-        console.log("connected page-inicio");
-  
+  "page-inicio",
+  class extends HTMLElement {
+    connectedCallback() {
+      console.log("connected page-inicio");
+
+      if (this instanceof HTMLElement) {
         this.innerHTML = document.getElementById("page-inicio.html").innerHTML;
-  
+
         this.productosRecientes = [];
-  
+
         this.cargarProductosRecientes();
-  
+
         // Escuchar eventos personalizados para la navegación
         this.addEventListener('navegarPageAmpliacion', (event) => {
           navegarPageAmpliacion(event.detail.productoId);
         });
-  
-        // Añadir evento para el botón "Ver productos"
+
+        // evento botón "ver productos"
         this.querySelector("#ver-productos-button").addEventListener('click', () => {
           navegarListadoProductos();
         });
-      }
-  
-      async cargarProductosRecientes() {
-        const searchUrl = construirUrlBusqueda('', CATEGORY_ID, [], 'date_desc', 0);
-        try {
-          const jsonRes = await fetchProductos(searchUrl);
-          this.productosRecientes = jsonRes.results.slice(0, 5);
-          this.mostrarProductosRecientes();
-        } catch (error) {
-          mostrarError("Error cargando productos recientes");
-        }
-      }
-  
-      mostrarProductosRecientes() {
-        const slides = this.querySelector('#slides-recientes');
-        slides.innerHTML = this.productosRecientes.map(producto => {
-          const originalPrice = producto.original_price ? `<span class="original-price">${producto.original_price} ${producto.currency_id}</span>` : '';
-          const discountedPrice = `<span class="discounted-price">${producto.price} ${producto.currency_id}</span>`;
-          return `
-            <ion-slide>
-              <ion-card>
-                <img src="${producto.thumbnail}" />
-                <ion-card-header>
-                  <ion-card-title>${producto.title}</ion-card-title>
-                  <ion-card-subtitle>
-                    ${originalPrice} ${discountedPrice}
-                  </ion-card-subtitle>
-                </ion-card-header>
-                <ion-button onclick="this.dispatchEvent(new CustomEvent('navegarPageAmpliacion', { detail: { productoId: '${producto.id}' }, bubbles: true }))">
-                  Ver más
-                </ion-button>
-              </ion-card>
-            </ion-slide>
-          `;
-        }).join('');
+
+        configurarUserOptions(this); // pasar this
+      } else {
+        console.error('this no es un elemento HTML válido');
       }
     }
-  );
-  
+
+    async cargarProductosRecientes() {
+      const searchUrl = construirUrlBusqueda('', CATEGORY_ID, [], 'date_desc', 0);
+      try {
+        const jsonRes = await fetchProductos(searchUrl);
+        this.productosRecientes = jsonRes.results.slice(0, 5);
+        this.mostrarProductosRecientes();
+      } catch (error) {
+        mostrarError("Error cargando productos recientes");
+      }
+    }
+
+    mostrarProductosRecientes() {
+      const slides = this.querySelector('#slides-recientes');
+      slides.innerHTML = this.productosRecientes.map(producto => {
+        const originalPrice = producto.original_price ? `<span class="original-price">${producto.original_price} ${producto.currency_id}</span>` : '';
+        const discountedPrice = `<span class="discounted-price">${producto.price} ${producto.currency_id}</span>`;
+        return `
+          <ion-slide>
+            <ion-card onclick="this.dispatchEvent(new CustomEvent('navegarPageAmpliacion', { detail: { productoId: '${producto.id}' }, bubbles: true }))">
+              <img src="${producto.thumbnail}" />
+              <ion-card-header>
+                <ion-card-title>${producto.title}</ion-card-title>
+                <ion-card-subtitle>
+                  ${originalPrice} ${discountedPrice}
+                </ion-card-subtitle>
+              </ion-card-header>
+            </ion-card>
+          </ion-slide>
+        `;
+      }).join('');
+    }
+  }
+);
 
 customElements.define(
   "page-listado-productos",
@@ -114,38 +118,44 @@ customElements.define(
     connectedCallback() {
       console.log("connected page-listado-productos");
 
-      this.innerHTML = document.getElementById("page-listado-productos.html").innerHTML;
+      if (this instanceof HTMLElement) {
+        this.innerHTML = document.getElementById("page-listado-productos.html").innerHTML;
 
-      this.searchBar = this.querySelector("#search-bar");
-      this.searchBar.addEventListener("ionInput", this.onSearch.bind(this));
+        this.searchBar = this.querySelector("#search-bar");
+        this.searchBar.addEventListener("ionInput", this.onSearch.bind(this));
 
-      this.filterButton = this.querySelector("#filter-button");
-      this.sortButton = this.querySelector("#sort-button");
+        this.filterButton = this.querySelector("#filter-button");
+        this.sortButton = this.querySelector("#sort-button");
 
-      this.filterActionSheet = this.querySelector("#filter-action-sheet");
-      this.sortActionSheet = this.querySelector("#sort-action-sheet");
+        this.filterActionSheet = this.querySelector("#filter-action-sheet");
+        this.sortActionSheet = this.querySelector("#sort-action-sheet");
 
-      this.filterButton.addEventListener("click", this.abrirFiltroActionSheet.bind(this));
-      this.sortButton.addEventListener("click", this.cerrarSortActionSheet.bind(this));
+        this.filterButton.addEventListener("click", this.abrirFiltroActionSheet.bind(this));
+        this.sortButton.addEventListener("click", this.cerrarSortActionSheet.bind(this));
 
-      this.filters = [];
-      this.query = "";
-      this.categoria = CATEGORY_ID;
-      console.log(`Categoría inicial: ${this.categoria}`);
-      this.orden = "";
-      this.appliedFilters = [];
-      this.offset = 0;
-      this.hasMoreProducts = true;
+        this.filters = [];
+        this.query = "";
+        this.categoria = CATEGORY_ID;
+        console.log(`Categoría inicial: ${this.categoria}`);
+        this.orden = "";
+        this.appliedFilters = [];
+        this.offset = 0;
+        this.hasMoreProducts = true;
 
-      this.infiniteScroll = this.querySelector("#infinite-scroll");
-      this.infiniteScroll.addEventListener("ionInfinite", async () => {
-        console.log('Infinite Scroll solicitado');
-        await this.cargarMasProductos();
-        this.infiniteScroll.complete();
-      });
+        this.infiniteScroll = this.querySelector("#infinite-scroll");
+        this.infiniteScroll.addEventListener("ionInfinite", async () => {
+          console.log('Infinite Scroll solicitado');
+          await this.cargarMasProductos();
+          this.infiniteScroll.complete();
+        });
 
-      this.cargarFiltros();
-      this.cargarListadoProductos();
+        this.cargarFiltros();
+        this.cargarListadoProductos();
+
+        configurarUserOptions(this); // pasar this
+      } else {
+        console.error('this no es un elemento HTML válido');
+      }
     }
 
     onSearch(event) {
@@ -335,20 +345,30 @@ customElements.define(
     connectedCallback() {
       console.log("connected page-ampliacion-producto", this.productoId);
 
-      this.innerHTML = document.getElementById("page-ampliacion-producto.html").innerHTML;
+      if (this instanceof HTMLElement) {
+        this.innerHTML = document.getElementById("page-ampliacion-producto.html").innerHTML;
 
-      this.imageIndex = 0;
-      this.imagenes = [];
+        this.imageIndex = 0;
+        this.imagenes = [];
 
-      this.cargarInformacionProducto();
+        this.cargarInformacionProducto();
 
-      // Escuchar eventos personalizados para la navegación
-      this.addEventListener('navegarPageAmpliacion', (event) => {
-        navegarPageAmpliacion(event.detail.productoId);
-      });
+        // Escuchar eventos personalizados para la navegación
+        this.addEventListener('navegarPageAmpliacion', (event) => {
+          navegarPageAmpliacion(event.detail.productoId);
+        });
 
-      const productImage = this.querySelector("#product-image");
-      productImage.addEventListener("click", this.mostrarSiguienteImagen.bind(this));
+        const productImage = this.querySelector("#product-image");
+        productImage.addEventListener("click", this.mostrarSiguienteImagen.bind(this));
+
+        // Configurar el botón de compartir
+        configurarShareButton(this, this.productoId); 
+
+        // Configurar opciones de usuario en la página de ampliación del producto
+        configurarUserOptions(this); // pasar this
+      } else {
+        console.error('this no es un elemento HTML válido');
+      }
     }
 
     async cargarInformacionProducto() {
@@ -396,15 +416,12 @@ customElements.define(
       const grid = this.querySelector('#productos-similares');
       grid.innerHTML = productos.map(producto => `
         <ion-col size="6">
-          <ion-card>
+          <ion-card onclick="this.dispatchEvent(new CustomEvent('navegarPageAmpliacion', { detail: { productoId: '${producto.id}' }, bubbles: true }))">
             <img src="${producto.thumbnail}" />
             <ion-card-header>
               <ion-card-title>${producto.title}</ion-card-title>
               <ion-card-subtitle>${producto.price}</ion-card-subtitle>
             </ion-card-header>
-            <ion-button onclick="this.dispatchEvent(new CustomEvent('navegarPageAmpliacion', { detail: { productoId: '${producto.id}' }, bubbles: true }))">
-              Ver más
-            </ion-button>
           </ion-card>
         </ion-col>
       `).join('');
