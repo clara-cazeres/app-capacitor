@@ -252,12 +252,11 @@
       </ion-header>
 
       <ion-content>
-        <div class="padding-page">
+        <div id="filter-container" class="padding-page">
           <ion-searchbar
             id="search-bar"
             placeholder="Buscar productos"
           ></ion-searchbar>
-          <div class="chip-container" id="chip-container"></div>
 
           <ion-button fill="clear" id="filter-button"
             ><ion-icon slot="start" name="funnel-outline"></ion-icon
@@ -271,6 +270,8 @@
           "
             ></ion-icon
           ></ion-button>
+          <div class="chip-container" id="chip-container"></div>
+          <ion-text id="product-count"> </ion-text>
         </div>
 
         <ion-grid class="padding-page" id="listado-productos">
@@ -322,54 +323,64 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <img id="product-image" class="product-image" />
-        <ion-list>
-          <ion-item>
-            <ion-label id="product-name" class="product-name"></ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label id="product-price" class="product-price"></ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label id="product-brand" class="product-brand"></ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-button id="agregar-carrito">
-          <ion-icon name="cart-outline"></ion-icon>
-          Agregar al carrito
-        </ion-button>
-        <ion-item>
-          <ion-label>Compartir</ion-label>
-          <ion-button id="btn-share" slot="end">
-            <ion-icon name="share-social-outline"></ion-icon>
+        <div class="padding-page-wide">
+          <ion-list>
+            <ion-text>
+              <h2 id="product-name" class="product-name"></h2>
+            </ion-text>
+            <img id="product-image" class="product-image" />
+            <ion-text>
+              <h3 id="product-price" class="product-price"></h3>
+            </ion-text>
+            <p>
+              <ion-text id="product-brand" class="product-brand"></ion-text>
+            </p>
+
+            <p></p
+          ></ion-list>
+
+          <ion-button id="agregar-carrito">
+            <ion-icon name="cart-outline"></ion-icon>
+            Agregar al carrito
           </ion-button>
-        </ion-item>
-        <ion-accordion-group>
-          <ion-accordion>
-            <ion-item slot="header">
-              <ion-label>Descripción</ion-label>
-            </ion-item>
-            <ion-item slot="content">
-              <div id="product-description-content"></div>
-            </ion-item>
-          </ion-accordion>
-          <ion-accordion>
-            <ion-item slot="header">
-              <ion-label>Garantía</ion-label>
-            </ion-item>
-            <ion-item slot="content">
-              <div id="product-warranty"></div>
-            </ion-item>
-          </ion-accordion>
-        </ion-accordion-group>
-        <ion-list>
-          <ion-item-divider>
-            <ion-label>Productos similares</ion-label>
-          </ion-item-divider>
-          <ion-grid>
-            <ion-row id="productos-similares"></ion-row>
-          </ion-grid>
-        </ion-list>
+        </div>
+        <div class="padding-page">
+          <ion-item>
+            <ion-label>Compartir</ion-label>
+            <ion-icon
+              id="btn-share"
+              slot="end"
+              name="share-social-outline"
+            ></ion-icon>
+          </ion-item>
+
+          <ion-accordion-group>
+            <ion-accordion>
+              <ion-item slot="header">
+                <ion-label>Descripción</ion-label>
+              </ion-item>
+              <ion-item slot="content">
+                <div id="product-description-content"></div>
+              </ion-item>
+            </ion-accordion>
+            <ion-accordion>
+              <ion-item slot="header">
+                <ion-label>Garantía</ion-label>
+              </ion-item>
+              <ion-item slot="content">
+                <div id="product-warranty"></div>
+              </ion-item>
+            </ion-accordion>
+          </ion-accordion-group>
+          <ion-list>
+            <ion-text
+              ><h3 class="subtitle">También te puede interesar</h3></ion-text
+            >
+            <ion-grid>
+              <ion-row id="productos-similares"></ion-row>
+            </ion-grid>
+          </ion-list>
+        </div>
       </ion-content>
     </template>
 
@@ -392,10 +403,12 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list id="carrito-lista"></ion-list>
-        <ion-button id="btn-finalizar-compra" expand="block"
-          >Finalizar Compra</ion-button
-        >
+        <div class="padding-page-wide">
+          <ion-list id="carrito-lista"></ion-list>
+          <ion-button id="btn-finalizar-compra" expand="block"
+            >Finalizar Compra</ion-button
+          >
+        </div>
       </ion-content>
     </template>
 
@@ -407,15 +420,17 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list id="modal-carrito-lista"></ion-list>
-        <ion-footer>
-          <ion-button expand="block" id="btn-continuar-comprando"
-            >Continuar comprando</ion-button
-          >
-          <ion-button expand="block" id="btn-ver-carrito"
-            >Ver carrito</ion-button
-          >
-        </ion-footer>
+        <div class="padding-page">
+          <ion-list id="modal-carrito-lista"></ion-list>
+          <ion-footer>
+            <ion-button expand="block" id="btn-continuar-comprando"
+              >Continuar comprando</ion-button
+            >
+            <ion-button expand="block" id="btn-ver-carrito"
+              >Ver carrito</ion-button
+            >
+          </ion-footer>
+        </div>
       </ion-content>
     </template>
 
