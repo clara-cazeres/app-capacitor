@@ -1,16 +1,16 @@
 import { $ } from './constants.js';
 import './components.js';
-import './pages.js';
-import { configurarUserOptions, logout } from './functions.js';
-
+import './pages/pages.js';
+import { configurarUserOptions, logout } from './functions/functions.js';
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  iniciarApp();
+    iniciarApp();
 });
 
 export function iniciarApp() {
   guardarElementos();
   $.ionNav.setRoot('page-inicio');
+  configurarMenuNavegacion();
 }
 
 function guardarElementos() {
@@ -28,4 +28,48 @@ export function navegarPageAmpliacion(productoId) {
 export function navegarListadoProductos() {
   console.log("Navegando al listado de productos");
   $.ionNav.push('page-listado-productos');
+}
+
+export function navegarCarrito() {
+  console.log("Navegando al carrito de compras");
+  $.ionNav.push('page-carrito');
+}
+
+export function navegarInicio() {
+  console.log("Navegando a inicio");
+  $.ionNav.setRoot('page-inicio');
+}
+
+export function navegarLogin() {
+  console.log("Navegando a login");
+  $.ionNav.setRoot('page-login');
+}
+
+export function navegarRegistro() {
+    console.log("Navegando a registro");
+    $.ionNav.setRoot('page-registro');
+  }
+
+function configurarMenuNavegacion() {
+  document.getElementById('menu-inicio').addEventListener('click', () => {
+    navegarInicio();
+    document.querySelector('ion-menu').close();
+  });
+  document.getElementById('menu-productos').addEventListener('click', () => {
+    navegarListadoProductos();
+    document.querySelector('ion-menu').close();
+  });
+  document.getElementById('menu-carrito').addEventListener('click', () => {
+    navegarCarrito();
+    document.querySelector('ion-menu').close();
+  });
+  document.getElementById('menu-login').addEventListener('click', () => {
+    navegarLogin();
+    document.querySelector('ion-menu').close();
+  });
+  document.getElementById('menu-registro').addEventListener('click', () => {
+    navegarRegistro();
+    document.querySelector('ion-menu').close();
+  });
+
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>App Capacitor</title>
+    <title>Core Store</title>
 
     <!-- ionic -->
     <script
@@ -19,17 +19,49 @@
   </head>
   <body>
     <ion-app>
-      <ion-nav id="main-nav"></ion-nav>
+      <ion-menu content-id="main-nav">
+        <ion-toolbar>
+          <ion-img id="img-logo-menu" src="img/logo.png"></ion-img>
+        </ion-toolbar>
+        <ion-content>
+          <ion-list>
+            <ion-item button id="menu-inicio">
+              <ion-label>Inicio</ion-label>
+            </ion-item>
+            <ion-item button id="menu-productos">
+              <ion-label>Productos</ion-label>
+            </ion-item>
+            <ion-item button id="menu-carrito">
+              <ion-label>Carrito</ion-label>
+            </ion-item>
+            <ion-item button id="menu-login">
+              <ion-label>Login</ion-label>
+            </ion-item>
+            <ion-item button id="menu-registro">
+              <ion-label>Registro</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+      <ion-nav id="main-nav" main></ion-nav>
     </ion-app>
 
-    <!-- Registro y Login -->
+    <!-- Page Registro -->
     <template id="page-registro.html">
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="page-login.html"></ion-back-button>
+            <ion-menu-button></ion-menu-button>
           </ion-buttons>
           <ion-title>Registro</ion-title>
+          <ion-buttons slot="end">
+            <ion-button id="user-options-button">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button id="cart-button">
+              <ion-icon name="cart-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -81,13 +113,22 @@
       </ion-content>
     </template>
 
+    <!-- Page Login -->
     <template id="page-login.html">
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="page-inicio.html"></ion-back-button>
+            <ion-menu-button></ion-menu-button>
           </ion-buttons>
           <ion-title>Login</ion-title>
+          <ion-buttons slot="end">
+            <ion-button id="user-options-button">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button id="cart-button">
+              <ion-icon name="cart-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -131,13 +172,22 @@
       </ion-content>
     </template>
 
+    <!-- Page User -->
     <template id="page-user.html">
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-back-button defaultHref="page-inicio.html"></ion-back-button>
+            <ion-menu-button></ion-menu-button>
           </ion-buttons>
           <ion-title>User</ion-title>
+          <ion-buttons slot="end">
+            <ion-button id="user-options-button">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button id="cart-button">
+              <ion-icon name="cart-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -145,20 +195,27 @@
       </ion-content>
     </template>
 
+    <!-- Page inicio -->
     <template id="page-inicio.html">
       <ion-header>
         <ion-toolbar>
-          <ion-title><ion-img src="img/logo.png"></ion-img></ion-title>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>
+            <ion-img id="img-logo" src="img/logo.png"></ion-img>
+          </ion-title>
           <ion-buttons slot="end">
             <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
-            <ion-button>
+            <ion-button id="cart-button">
               <ion-icon name="cart-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
+
       <ion-content>
         <div class="inicio-container">
           <ion-img src="img/imagen-inicio.png"></ion-img>
@@ -166,13 +223,16 @@
             Ver productos
           </ion-button>
         </div>
-        <ion-list>
-          <ion-title>Nuevos ingresos</ion-title>
-          <ion-slides pager="true" id="slides-recientes"></ion-slides>
+        <ion-list class="padding-page">
+          <ion-title class="title-pages">Nuevos ingresos</ion-title>
+          <ion-grid>
+            <ion-row id="slides-recientes"></ion-row>
+          </ion-grid>
         </ion-list>
       </ion-content>
     </template>
 
+    <!-- Page listado productos -->
     <template id="page-listado-productos.html">
       <ion-header>
         <ion-toolbar>
@@ -184,21 +244,36 @@
             <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
-            <ion-button>
+            <ion-button id="cart-button">
               <ion-icon name="cart-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
+
       <ion-content>
-        <ion-searchbar
-          id="search-bar"
-          placeholder="Buscar productos"
-        ></ion-searchbar>
-        <div class="chip-container" id="chip-container"></div>
-        <ion-button id="filter-button">Filtros</ion-button>
-        <ion-button id="sort-button">Ordenar</ion-button>
-        <ion-grid id="listado-productos">
+        <div class="padding-page">
+          <ion-searchbar
+            id="search-bar"
+            placeholder="Buscar productos"
+          ></ion-searchbar>
+          <div class="chip-container" id="chip-container"></div>
+
+          <ion-button fill="clear" id="filter-button"
+            ><ion-icon slot="start" name="funnel-outline"></ion-icon
+            >Filtrar</ion-button
+          >
+          <ion-button fill="clear" id="sort-button">
+            Ordenar
+            <ion-icon
+              slot="end"
+              name="chevron-down-outline
+          "
+            ></ion-icon
+          ></ion-button>
+        </div>
+
+        <ion-grid class="padding-page" id="listado-productos">
           <ion-row>
             <ion-col size="6">
               <skeleton-producto></skeleton-producto>
@@ -226,6 +301,7 @@
       <ion-action-sheet id="sort-action-sheet"></ion-action-sheet>
     </template>
 
+    <!-- Page ampliacion -->
     <template id="page-ampliacion-producto.html">
       <ion-header>
         <ion-toolbar>
@@ -239,7 +315,7 @@
             <ion-button id="user-options-button">
               <ion-icon name="person-circle-outline"></ion-icon>
             </ion-button>
-            <ion-button>
+            <ion-button id="cart-button">
               <ion-icon name="cart-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -249,18 +325,43 @@
         <img id="product-image" class="product-image" />
         <ion-list>
           <ion-item>
-            <ion-label id="product-name" text-wrap></ion-label>
+            <ion-label id="product-name" class="product-name"></ion-label>
           </ion-item>
           <ion-item>
-            <ion-label id="product-price" text-wrap></ion-label>
+            <ion-label id="product-price" class="product-price"></ion-label>
           </ion-item>
           <ion-item>
-            <ion-label id="product-description" text-wrap></ion-label>
+            <ion-label id="product-brand" class="product-brand"></ion-label>
           </ion-item>
         </ion-list>
-        <ion-button id="agregar-carrito">Agregar al carrito</ion-button>
-        <ion-button id="btn-share">Compartir</ion-button>
-
+        <ion-button id="agregar-carrito">
+          <ion-icon name="cart-outline"></ion-icon>
+          Agregar al carrito
+        </ion-button>
+        <ion-item>
+          <ion-label>Compartir</ion-label>
+          <ion-button id="btn-share" slot="end">
+            <ion-icon name="share-social-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-accordion-group>
+          <ion-accordion>
+            <ion-item slot="header">
+              <ion-label>Descripción</ion-label>
+            </ion-item>
+            <ion-item slot="content">
+              <div id="product-description-content"></div>
+            </ion-item>
+          </ion-accordion>
+          <ion-accordion>
+            <ion-item slot="header">
+              <ion-label>Garantía</ion-label>
+            </ion-item>
+            <ion-item slot="content">
+              <div id="product-warranty"></div>
+            </ion-item>
+          </ion-accordion>
+        </ion-accordion-group>
         <ion-list>
           <ion-item-divider>
             <ion-label>Productos similares</ion-label>
@@ -269,6 +370,52 @@
             <ion-row id="productos-similares"></ion-row>
           </ion-grid>
         </ion-list>
+      </ion-content>
+    </template>
+
+    <!-- Page carrito -->
+    <template id="page-carrito.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title>Carrito</ion-title>
+          <ion-buttons slot="end">
+            <ion-button id="user-options-button">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button id="cart-button">
+              <ion-icon name="cart-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list id="carrito-lista"></ion-list>
+        <ion-button id="btn-finalizar-compra" expand="block"
+          >Finalizar Compra</ion-button
+        >
+      </ion-content>
+    </template>
+
+    <!-- Modal carrito -->
+    <template id="modal-carrito.html">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Carrito</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list id="modal-carrito-lista"></ion-list>
+        <ion-footer>
+          <ion-button expand="block" id="btn-continuar-comprando"
+            >Continuar comprando</ion-button
+          >
+          <ion-button expand="block" id="btn-ver-carrito"
+            >Ver carrito</ion-button
+          >
+        </ion-footer>
       </ion-content>
     </template>
 

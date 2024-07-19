@@ -1,15 +1,117 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
+/* Colores */
+:root {
+  --ion-background-color: #fafafa;
+  --ion-text-color: #000000;
+  --ion-color-primary: #000000;
+  --ion-color-secondary: #707070;
+  --ion-color-tertiary: #007aff;
+  --ion-color-light: #f2f2f7;
+  --ion-color-dark: #2a2a2a;
+
+  /* Colores botones */
+  --ion-button-background: var(--ion-color-primary);
+  --ion-button-text-color: #ffffff;
+
+  /* Colores toolbar*/
+  --ion-toolbar-background: var(--ion-background-color);
+  --ion-toolbar-text-color: var(--ion-text-color);
+
+  /* Colores cards */
+  --ion-card-background: #ffffff;
+  --ion-card-text-color: var(--ion-text-color);
+
+  /* Colores input */
+  --ion-input-background: #ffffff;
+  --ion-input-color: var(--ion-text-color);
+
+  /* Colores para íconos */
+  --ion-icon-color: var(--ion-color-primary);
+
+  /* Skeleton text colors */
+  --ion-skeleton-text-background: #e0e0e0;
+  --ion-skeleton-text-color: #c7c7c7;
+}
+
+/* Tipografias */
+:root {
+  --ion-font-family: "Manrope", sans-serif;
+  --ion-title-font-size: 1.5rem !important;
+  --ion-title-font-weight: 700 !important;
+}
+
+/* Estilos  */
 body {
-  font-family: "Manrope", sans-serif;
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+#img-logo {
+  width: 50%;
+  padding: 0.4em 0;
+}
+
+#img-logo-menu {
+  width: 40%;
+  padding: 0.2em 1em;
+}
+
+/* ionic */
+
+ion-toolbar {
+  --background: var(--ion-toolbar-background);
+  --color: var(--ion-toolbar-text-color);
+  border-bottom: 1px solid var(--ion-color-secondary);
+}
+
+ion-title {
+  font-size: 1.5em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.title-pages {
+  padding-top: 1em;
+}
+
+.padding-page {
+  padding: 0.8em !important;
+}
+
+ion-card {
+  --background: var(--ion-card-background);
+  --color: var(--ion-card-text-color);
+  box-shadow: 3px 3px 8px -2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 3px 3px 8px -2px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 3px 3px 8px -2px rgba(0, 0, 0, 0.3);
+}
+
+ion-card-content {
+  color: rgb(191, 0, 0);
+  padding-bottom: 0 !important;
+}
+ion-col {
+  padding: 0;
+}
+
+ion-input {
+  --background: var(--ion-input-background);
+  --color: var(--ion-input-color);
+}
+
+ion-icon {
+  color: var(--ion-icon-color);
 }
 
 ion-card img {
   width: 100%;
+  padding: 0.6em 0.6em 0 0.6em;
 }
 
 ion-skeleton-text {
-  border-radius: 4px;
+  --background: var(--ion-skeleton-text-background);
+  --color: var(--ion-skeleton-text-color);
 }
 
 .chip-container {
@@ -18,10 +120,10 @@ ion-skeleton-text {
   gap: 8px;
   margin-bottom: 16px;
 }
-
 .product-image {
   width: 100%;
   height: auto;
+  padding: 0.4em;
 }
 
 .inicio-container {
@@ -31,18 +133,19 @@ ion-skeleton-text {
 
 .ver-productos-button {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 80%;
+  left: 10%;
   z-index: 1;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-button-text-color);
 }
 
 .original-price {
   text-decoration: line-through;
-  color: #9d8d78;
+  color: var(--ion-color-secondary);
 }
 
 .discounted-price {
-  color: #535353;
+  color: var(--ion-color-primary);
   font-weight: bold;
 }

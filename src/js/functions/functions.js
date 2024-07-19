@@ -1,10 +1,10 @@
-import { global } from './constants.js';
+import { global } from '../constants.js';
 
-export function configurarUserOptions(elementoRaiz) {
-  setTimeout(() => {  // Usar un setTimeout para asegurar que el DOM esté actualizado
+export function configurarUserOptions(page) {
+  setTimeout(() => {  // asegurar que el DOM esté actualizado
     try {
-      if (elementoRaiz instanceof HTMLElement) {
-        const userOptionsButton = elementoRaiz.querySelector("#user-options-button");
+      if (page instanceof HTMLElement) {
+        const userOptionsButton = page.querySelector("#user-options-button");
 
         if (userOptionsButton) {
           userOptionsButton.addEventListener("click", async () => {
@@ -53,8 +53,6 @@ export function configurarUserOptions(elementoRaiz) {
         } else {
           console.log('user-options-button no encontrado en esta página');
         }
-      } else {
-        console.error('elementoRaiz no es un elemento HTML válido');
       }
     } catch (error) {
       console.error('Error al configurar user-options-button:', error);
@@ -166,7 +164,6 @@ export function submitFormRegistro(ev) {
         toast.present();
       });
   }
-  
   
 export function validarSesion() {
   const token = localStorage.getItem("user-token");

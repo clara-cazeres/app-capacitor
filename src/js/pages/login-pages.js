@@ -4,7 +4,7 @@ import {
     validarSesion,
     obtenerInfoUsuario,
     logout
-  } from "../functions.js";
+  } from "../functions/functions.js";
   
   customElements.define(
     "page-registro",
